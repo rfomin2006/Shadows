@@ -160,14 +160,31 @@ const createMenu = (ev, menuId) => {
 
   }
   if (menuId === 'boxMenu') {
+    const box = document.getElementById('box');
+    menu.style.flexDirection = 'column';
     const bgPicker = document.getElementById('bgPicker');
+    const boxWidth = document.createElement('input');
+    const boxWidthContainer = document.createElement('div');
+    const boxWidthLabel = document.createElement('label');
+    boxWidthLabel.innerHTML = 'Width';
+    boxWidthContainer.style.display = 'flex';
     bgPicker.value = box.style.backgroundColor;
     bgPicker.style.width = '50px';
     bgPicker.style.height = '50px';
     bgPicker.style.border = '1px solid var(--clr2)';
+    boxWidth.type = 'range';
+    boxWidth.min = '10';
+    boxWidth.max = '500';
+    boxWidth.value = box.clientWidth;
+    boxWidthContainer.appendChild(boxWidth);
+    boxWidthContainer.appendChild(boxWidthLabel);
+    menu.appendChild(boxWidthContainer);
     bgPicker.addEventListener('input', ev => {
       box.style.backgroundColor = ev.target.value;
     });
+    boxWidth.addEventListener('input', ev => {
+      box.style.width = boxWidth.value + 'px';
+    })
   }
   const x = ev.clientX;
   const y = ev.clientY;
@@ -183,11 +200,11 @@ const createMenu = (ev, menuId) => {
 root.addEventListener('click', ev => {
 
   if (ev.target.id === 'root') {
-    const menus = Array.from(document.querySelectorAll('.rootMenu'));
+    const menus = Array.from(document.querySelectorAll('.rootMenu')).concat(Array.from(document.querySelectorAll('.boxMenu')));
     menus.length === 0 ? createMenu(ev, 'rootMenu') : deleteMenus(menus);
   }
   if (ev.target.id === 'box') {
-    const menus = Array.from(document.querySelectorAll('.boxMenu'));
+    const menus = Array.from(document.querySelectorAll('.boxMenu')).concat(Array.from(document.querySelectorAll('.rootMenu')));
     menus.length === 0 ? createMenu(ev, 'boxMenu') : deleteMenus(menus);
   }
 });
